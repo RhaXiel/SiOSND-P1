@@ -15,11 +15,7 @@ class RecordSoundsViewController : NSObject, ObservableObject, AVAudioRecorderDe
     
     var audioRecorder: AVAudioRecorder!
     
-    func recordAudio(){//_ sender: AnyObject){
-        //SetRecordingText
-        //DisableStopRecording
-        //enableStartRecording
-        
+    func recordAudio(){
         let dirPath = NSSearchPathForDirectoriesInDomains(
             .documentDirectory,
             .userDomainMask,
@@ -40,7 +36,7 @@ class RecordSoundsViewController : NSObject, ObservableObject, AVAudioRecorderDe
         audioRecorder.record()
     }
     
-    func stopRecording(){//(_ sender: AnyObject){
+    func stopRecording(){
         audioRecorder.stop()
         let audioSession = AVAudioSession.sharedInstance()
         try! audioSession.setActive(false)

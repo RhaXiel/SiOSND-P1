@@ -14,7 +14,7 @@ class PlaySoundsViewController : NSObject, ObservableObject{
     var audioEngine:AVAudioEngine!
     var audioPlayerNode: AVAudioPlayerNode!
     var stopTimer: Timer!
-    var playingState: PlayingState!
+    @Published var playingState: PlayingState! = .notPlaying
     var isPlaying: Bool {
         get {
             switch (self.playingState){
@@ -25,6 +25,13 @@ class PlaySoundsViewController : NSObject, ObservableObject{
             case .none:
                 return false
             }
+        }
+    }
+    @Published var mustShowAlert : Bool = false
+    @Published var alertMessage : AlertMessage? = nil
+    var showAlert: Bool{
+        get {
+            return self.alertMessage != nil
         }
     }
 }

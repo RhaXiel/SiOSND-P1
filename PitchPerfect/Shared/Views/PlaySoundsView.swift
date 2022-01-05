@@ -11,7 +11,7 @@ import AVFoundation
 struct PlaySoundsView: View {
     var recordedAudioURL: URL!
     @ObservedObject var audioPlayer = PlaySoundsViewController()
-     
+    
     enum ButtonType: Int {
         case slow = 0, fast = 1, chipmunk = 2, vader = 3, echo = 4, reverb = 5
     }
@@ -67,7 +67,7 @@ struct PlaySoundsView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .disabled(audioPlayer.isPlaying)
-
+                
                 Button(action: {
                     playSoundForButton(ButtonType.reverb)
                 })
@@ -86,22 +86,20 @@ struct PlaySoundsView: View {
                     .frame(width: 64, height: 64)
             }
             .frame(maxHeight: .infinity)
-            //Text("Play sounds")
-            //Text(recordedAudioURL?.absoluteString ?? "Nada")
+            .disabled(!audioPlayer.isPlaying)
         }
-        .navigationTitle("Pitch Perfect Recorded")
+        .navigationTitle("Pitch Perfect Play Sounds")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: assignURL)//audioPlayer.setupAudio)
+        .onAppear(perform: assignURL)
+        .alert(audioPlayer.alertMessage?.Title ?? "Unknown error", isPresented: $audioPlayer.mustShowAlert, actions: {})
     }
     
     func assignURL () {
         audioPlayer.recordedAudioURL = self.recordedAudioURL
-        print(recordedAudioURL?.absoluteString ?? "Vacio")
         audioPlayer.setupAudio()
     }
     
     func playSoundForButton(_ buttonType: ButtonType){
-        print("Play sound for button pressed for value \(buttonType)")
         switch(buttonType){
         case .slow:
             audioPlayer.playSound(rate: 0.5)
@@ -116,11 +114,10 @@ struct PlaySoundsView: View {
         case .reverb:
             audioPlayer.playSound(reverb: true)
         }
-        audioPlayer.configureUI(.playing)
+        audioPlayer.playingState = .playing
     }
     
     func stopButtonPressed(){
-        print("Stop audio button pressed")
         audioPlayer.stopAudio()
     }
     
@@ -129,6 +126,6 @@ struct PlaySoundsView: View {
 struct PlaySoundsView_Previews: PreviewProvider {
     static var previews: some View {
         PlaySoundsView()
-.previewInterfaceOrientation(.portrait)
+            .previewInterfaceOrientation(.portrait)
     }
 }
